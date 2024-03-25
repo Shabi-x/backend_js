@@ -1,20 +1,20 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  HttpCode,
-  HttpStatus,
+  // HttpCode,
+  // HttpStatus,
   Param,
+  Patch,
   Post,
-  Res,
 } from '@nestjs/common';
 
 @Controller('coffees')
 export class CoffeesController {
   @Get()
-  findAll(@Res() response) {
-    // return 'This action returns all coffees';
-    response.status(HttpStatus.OK).send('This action returns all coffees'); //使用response对象返回数据
+  findAll() {
+    return 'This action returns all coffees';
   }
   @Get('/:id')
   // findOne(@Param() params) {
@@ -26,9 +26,19 @@ export class CoffeesController {
   @Post()
   // create(@Body('name') body) {
   //只获取body中的name参数
-  @HttpCode(HttpStatus.CREATED) //设置返回状态码为201 Created
+  // @HttpCode(HttpStatus.CREATED)//设置返回状态码
   create(@Body() body) {
     //获取body中的所有参数
     return body;
+  }
+
+  @Patch('/:id')
+  update(@Param('id') id: string, @Body() body) {
+    return `This action updates #${id} coffees`;
+  }
+
+  @Delete('/:id')
+  remove(@Param('id') id: string) {
+    return `This action removes #${id} coffees`;
   }
 }
