@@ -8,13 +8,16 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 @Controller('coffees')
 export class CoffeesController {
   @Get()
-  findAll() {
-    return 'This action returns all coffees';
+  findAll(@Query() paginationQuery) {
+    // localhost:3001/coffees?limit=20&offset=10,apifox会自动解析并获取limit和offset两个query参数
+    const { limit, offset } = paginationQuery; //获取分页参数limit是每页显示的条数，offset是偏移量
+    return 'This action returns all ,limit=' + limit + ',offset=' + offset;
   }
   @Get('/:id')
   // findOne(@Param() params) {
