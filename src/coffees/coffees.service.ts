@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Coffee } from './entities/coffee.entiy';
 
 @Injectable()
@@ -39,7 +44,12 @@ export class CoffeesService {
     return this.coffees; //返回所有咖啡数据
   }
   findOne(id: string): Coffee {
-    return this.coffees.find((coffee) => coffee.id === +id);
+    const coffee = this.coffees.find((coffee) => coffee.id === +id);
+    if (!coffee) {
+      //   throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(`Coffee #${id} not found`);
+    }
+    return coffee;
     //+id把字符串类型的id转换为数字类型，便于比较
   }
   create(createCoffeeDto: any): void {
