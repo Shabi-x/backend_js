@@ -22,9 +22,7 @@ export class CoffeesController {
   findAll(@Query() paginationQuery) {
     // localhost:3001/coffees?limit=20&offset=10, apifox会自动解析并获取limit和offset两个QUERY参数
     const { limit, offset } = paginationQuery; //获取分页参数limit是每页显示的条数，offset是偏移量
-    return (
-      this.coffeesService.findAll() + 'limit:' + limit + 'offset:' + offset
-    );
+    return this.coffeesService.findAll();
   }
   @Get('/:id')
   // findOne(@Param() params) {
