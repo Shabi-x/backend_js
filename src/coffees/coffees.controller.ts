@@ -11,6 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -36,16 +38,16 @@ export class CoffeesController {
   // create(@Body('name') body) {
   //只获取body中的name参数
   // @HttpCode(HttpStatus.CREATED)//设置返回状态码
-  create(@Body() body) {
+  create(@Body() CreateCoffeeDto: CreateCoffeeDto) {
     //获取body中的所有参数
     // return body;
-    return this.coffeesService.create(body);
+    return this.coffeesService.create(CreateCoffeeDto);
   }
 
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() body) {
+  update(@Param('id') id: string, @Body() UpdateCoffeeDto: UpdateCoffeeDto) {
     // return `This action updates #${id} ¥${body.name} coffees`;
-    return this.coffeesService.update(id, body);
+    return this.coffeesService.update(id, UpdateCoffeeDto);
   }
 
   @Delete('/:id')
