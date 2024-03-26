@@ -1,6 +1,6 @@
 import {
-  HttpException,
-  HttpStatus,
+  //   HttpException,
+  //   HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -59,7 +59,7 @@ export class CoffeesService {
     const exsitCoffee = this.findOne(id);
     if (exsitCoffee) {
       //如果存在该id的咖啡，则更新其属性
-      //   Object.assign(exsitCoffee, updateCoffeeDto);
+      Object.assign(exsitCoffee, updateCoffeeDto);
     }
   }
   remove(id: string): void {
