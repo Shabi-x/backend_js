@@ -54,6 +54,7 @@ export class CoffeesService {
   }
   create(createCoffeeDto: any): void {
     this.coffees.push(createCoffeeDto);
+    return createCoffeeDto; //会自动剥离白名单外的属性，除了dto中定义的属性，其他属性都不会被保存到数据库
   }
   update(id: string, updateCoffeeDto: any): void {
     const exsitCoffee = this.findOne(id);
