@@ -22,12 +22,17 @@ export class CoffeesService {
   //使用InjectRepository 装饰器，将CoffeeEntity注入到coffeeRepository中，方便后续操作
 
   findAll() {
-    return this.coffeeRepository.find(); //返回所有咖啡数据
+    return this.coffeeRepository.find({
+      relations: ['flavors'],
+    }); //返回所有咖啡数据
   }
 
-  async findOne(id) {
+  async findOne(id: string) {
     // const coffee = this.coffees.find((coffee) => coffee.id === +id);
-    const coffee = await this.coffeeRepository.findOne(id); //返回id对应的咖啡数据
+    const coffee = await this.coffeeRepository.findOne({
+      where: { id: Number(id) },
+      relations: ['flavors'],
+    }); //返回id对应的咖啡数据
     if (!coffee) {
       //   throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`Coffee #${id} not found`);
