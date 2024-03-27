@@ -19,7 +19,9 @@ export class Coffee {
   brand: string;
 
   @JoinTable()
-  @ManyToMany((type) => Flavor, (flavor) => flavor.coffees)
+  @ManyToMany((type) => Flavor, (flavor) => flavor.coffees, {
+    cascade: true, //这里的作用是当删除coffee时，同时删除其关联的flavor
+  })
   // 定义多对多关系:第一个参数返回关联的实体类的引用，这里是Flavor，第二个参数返回关联的实体类中的字段名，指定了需要选择的属性？
-  flavors: string[];
+  flavors: Flavor[];
 }
