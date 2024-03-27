@@ -39,7 +39,7 @@ export class CoffeesService {
   }
   create(createCoffeeDto: CreateCoffeeDto): void {
     // this.coffees.push(createCoffeeDto);
-    // return createCoffeeDto; //会自动剥离白名单外的属性，除了dto中定义的属性，其他属性都不会被保存到数据库
+    // return createCoffeeDto; //配合dto使用,会自动剥离白名单外的属性，除了dto中定义的属性，其他属性都不会被保存到数据库
     const coffee = this.coffeeRepository.create(createCoffeeDto);
     this.coffeeRepository.save(coffee);
   }
