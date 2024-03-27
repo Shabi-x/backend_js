@@ -5,46 +5,31 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entiy';
+import { FindOneOptions, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Injectable()
 //coffeeService负责管理咖啡相关的业务逻辑，存储、查询、更新、删除等操作
 //供coffeesController或者其他地方调用
 //通常provider和services处理业务逻辑以及和数据源的交互，controller处理请求
 export class CoffeesService {
-  private coffees: Coffee[] = [
-    {
-      id: 1,
-      name: 'latte',
-      brand: 'espresso',
-      flavours: ['vanilla', 'chocolate'],
-    },
-    {
-      id: 2,
-      name: 'americano',
-      brand: 'espresso',
-      flavours: ['vanilla', 'chocolate'],
-    },
+  constructor(
+    @InjectRepository(Coffee)
+    private readonly coffeeRepository: Repository<Coffee>,
+  ) {}
+  //使用InjectRepository 装饰器，将CoffeeEntity注入到coffeeRepository中，方便后续操作
 
-    {
-      id: 3,
-      name: 'cappuccino',
-      brand: 'espresso',
-      flavours: ['vanilla', 'chocolate'],
-    },
-
-    {
-      id: 4,
-      name: 'mocha',
-      brand: 'espresso',
-      flavours: ['vanilla', 'chocolate'],
-    },
-  ]; //将其视作数据库，存储咖啡数据
-
-  findAll(): Coffee[] {
-    return this.coffees; //返回所有咖啡数据
+  findAll() {
+    return this.coffeeRepository.find(); //返回所有咖啡数据
   }
-  findOne(id: string): Coffee {
-    const coffee = this.coffees.find((coffee) => coffee.id === +id);
+
+  async findOne(id: string) {
+    // const coffee = this.coffees.find((coffee) => coffee.id === +id);
+    const coffee = await this.coffeeRepository.findOne(
+      id as FindOneOptions<Coffee>,
+    ); //返回id对应的咖啡数据
     if (!coffee) {
       //   throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -52,21 +37,33 @@ export class CoffeesService {
     return coffee;
     //+id把字符串类型的id转换为数字类型，便于比较
   }
-  create(createCoffeeDto: any): void {
-    this.coffees.push(createCoffeeDto);
-    return createCoffeeDto; //会自动剥离白名单外的属性，除了dto中定义的属性，其他属性都不会被保存到数据库
+  create(createCoffeeDto: CreateCoffeeDto): void {
+    // this.coffees.push(createCoffeeDto);
+    // return createCoffeeDto; //会自动剥离白名单外的属性，除了dto中定义的属性，其他属性都不会被保存到数据库
+    const coffee = this.coffeeRepository.create(createCoffeeDto);
+    this.coffeeRepository.save(coffee);
   }
-  update(id: string, updateCoffeeDto: any): void {
-    const exsitCoffee = this.findOne(id);
-    if (exsitCoffee) {
-      //如果存在该id的咖啡，则更新其属性
-      Object.assign(exsitCoffee, updateCoffeeDto);
+  async update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+    // const exsitCoffee = this.findOne(id);
+    // if (exsitCoffee) {
+    //   //如果存在该id的咖啡，则更新其属性
+    //   Object.assign(exsitCoffee, updateCoffeeDto);
+    // }
+    const coffee = await this.coffeeRepository.preload({
+      id: +id,
+      ...updateCoffeeDto,
+    });
+    if (!coffee) {
+      throw new NotFoundException(`Coffee #${id} not found`);
     }
+    this.coffeeRepository.save(coffee);
   }
-  remove(id: string): void {
-    const index = this.coffees.findIndex((coffee) => coffee.id === +id);
-    if (index >= 0) {
-      this.coffees.splice(index, 1);
-    }
+  async remove(id: string) {
+    // const index = this.coffees.findIndex((coffee) => coffee.id === +id);
+    // if (index >= 0) {
+    //   this.coffees.splice(index, 1);
+    // }
+    const coffee = await this.findOne(id);
+    return this.coffeeRepository.remove(coffee);
   }
 }

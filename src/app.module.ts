@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    CoffeesModule,
+    CoffeesModule, //使用命令nest g module 生成
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       autoLoadEntities: true,
     }),
-  ], //使用命令nest g module 生成
+  ],
   controllers: [AppController], //使用命令nest g controller 生成
   providers: [AppService], //使用命令nest g service 生成
 })
