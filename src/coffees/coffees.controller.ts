@@ -26,8 +26,6 @@ export class CoffeesController {
     return this.coffeesService.findAll();
   }
   @Get('/:id')
-  // findOne(@Param() params) {
-  //获取id参数
   findOne(@Param('id') id: string) {
     // return `This action returns #${id} coffees`;
     return this.coffeesService.findOne(id);

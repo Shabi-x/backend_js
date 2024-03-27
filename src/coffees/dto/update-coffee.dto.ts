@@ -1,7 +1,7 @@
 // export class UpdateCoffeeDto {
 //   readonly name?: string;
 //   readonly brand?: string;
-//   readonly flavours?: string[];
+//   readonly flavors?: string[];
 // }
 
 import { PartialType } from '@nestjs/mapped-types';

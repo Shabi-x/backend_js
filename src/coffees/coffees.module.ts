@@ -19,7 +19,9 @@ import { Flavor } from './entities/flavor.entity/flavor.entity';
   //此时应该把coffeesService和coffeesController从AppModule中删除引用，
   //这是因为如果我们不把它们实例化，他们会被实例化两次
   //一个模块只是组织了与特定功能相关的代码，帮助我们保持代码的条理性，并为我们的程序建立清晰的边界
-  imports: [TypeOrmModule.forFeature([Coffee, Flavor])], //导入TypeORM模块，并注册Coffee实体到模块中
+  imports: [TypeOrmModule.forFeature([Coffee, Flavor])],
+  //导入TypeOrmModule，并将Coffee和Flavor这两个实体类注册到当前模块中。
+  //这是为了确保在当前模块或任何从当前模块导入的其他模块中，Coffee和Flavor实体可以被TypeORM使用。
   exports: [],
 })
 export class CoffeesModule {}

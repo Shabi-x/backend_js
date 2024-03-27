@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entiy';
-import { FindOneOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -25,11 +25,9 @@ export class CoffeesService {
     return this.coffeeRepository.find(); //返回所有咖啡数据
   }
 
-  async findOne(id: string) {
+  async findOne(id) {
     // const coffee = this.coffees.find((coffee) => coffee.id === +id);
-    const coffee = await this.coffeeRepository.findOne(
-      id as FindOneOptions<Coffee>,
-    ); //返回id对应的咖啡数据
+    const coffee = await this.coffeeRepository.findOne(id); //返回id对应的咖啡数据
     if (!coffee) {
       //   throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`Coffee #${id} not found`);
