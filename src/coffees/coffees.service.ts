@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 @Injectable()
 //coffeeService负责管理咖啡相关的业务逻辑，存储、查询、更新、删除等操作
@@ -24,9 +25,12 @@ export class CoffeesService {
   ) {}
   //使用InjectRepository 装饰器，将CoffeeEntity注入到coffeeRepository中，方便后续操作
 
-  findAll() {
+  findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
     return this.coffeeRepository.find({
       relations: ['flavors'],
+      skip: offset, //offset 用于设定查询结果的偏移量，即跳过多少条记录后再开始返回结果集。
+      take: limit, //limit 用于设定返回结果的数量，即一次返回多少条记录。
     }); //返回所有咖啡数据
   }
 
