@@ -18,6 +18,9 @@ export class Coffee {
   @Column()
   brand: string;
 
+  @Column({ default: 0 })
+  recommendations: number;
+
   @JoinTable()
   @ManyToMany((type) => Flavor, (flavor) => flavor.coffees, {
     cascade: true, //这里的作用是当删除coffee时，同时删除其关联的flavor

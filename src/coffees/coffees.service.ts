@@ -5,13 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entiy';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
-
+import { Event } from '../events/entities/event.entity/event.entity';
 @Injectable()
 //coffeeService负责管理咖啡相关的业务逻辑，存储、查询、更新、删除等操作
 //供coffeesController或者其他地方调用
@@ -22,6 +22,7 @@ export class CoffeesService {
     private readonly coffeeRepository: Repository<Coffee>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
+    private readonly connection: DataSource,
   ) {}
   //使用InjectRepository 装饰器，将CoffeeEntity注入到coffeeRepository中，方便后续操作
 
@@ -86,6 +87,29 @@ export class CoffeesService {
     // }
     const coffee = await this.findOne(id);
     return this.coffeeRepository.remove(coffee);
+  }
+
+  async recommendCoffee(coffee: Coffee) {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      coffee.recommendations++;
+
+      const recommendEvent = new Event();
+      recommendEvent.name = 'coffee_recommend';
+      recommendEvent.type = 'coffee';
+
+      recommendEvent.payload = { coffeeId: coffee.id };
+      await queryRunner.manager.save(coffee);
+      await queryRunner.manager.save(recommendEvent);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private async preloadFlavorsByName(name: string): Promise<Flavor> {
