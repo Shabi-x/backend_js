@@ -90,20 +90,20 @@ export class CoffeesService {
   }
 
   async recommendCoffee(coffee: Coffee) {
-    const queryRunner = this.connection.createQueryRunner();
+    const queryRunner = this.connection.createQueryRunner(); //createQueryRunner方法用于创建QueryRunner实例，用于执行数据库事务
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       coffee.recommendations++;
 
-      const recommendEvent = new Event();
+      const recommendEvent = new Event(); //创立一个推荐事件对象
       recommendEvent.name = 'coffee_recommend';
       recommendEvent.type = 'coffee';
 
       recommendEvent.payload = { coffeeId: coffee.id };
       await queryRunner.manager.save(coffee);
-      await queryRunner.manager.save(recommendEvent);
+      await queryRunner.manager.save(recommendEvent); //两个保存都成功后，才提交事务，否则回滚事务
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
