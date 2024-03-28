@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Flavor } from './flavor.entity/flavor.entity';
+import { Flavor } from './flavor.entity';
 
 @Entity() //每一个Entity类代表一个sql表，这里会生成一个名为coffees的表
 export class Coffee {

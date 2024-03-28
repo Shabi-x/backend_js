@@ -3,7 +3,7 @@ import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Coffee } from './entities/coffee.entiy';
-import { Flavor } from './entities/flavor.entity/flavor.entity';
+import { Flavor } from './entities/flavor.entity';
 
 /**
 //Module参数有四个，分别是controllers、providers、exports、imports。

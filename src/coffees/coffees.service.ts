@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { Flavor } from './entities/flavor.entity/flavor.entity';
+import { Flavor } from './entities/flavor.entity';
 
 @Injectable()
 //coffeeService负责管理咖啡相关的业务逻辑，存储、查询、更新、删除等操作
