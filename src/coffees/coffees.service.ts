@@ -95,8 +95,7 @@ export class CoffeesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      coffee.recommendations++;
-
+      coffee.recommendations++; //coffee的推荐次数加1
       const recommendEvent = new Event(); //创立一个推荐事件对象
       recommendEvent.name = 'coffee_recommend';
       recommendEvent.type = 'coffee';
