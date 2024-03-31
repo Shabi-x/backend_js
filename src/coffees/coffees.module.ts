@@ -22,6 +22,6 @@ import { Event } from '../events/entities/event.entity/event.entity';
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
   //导入TypeOrmModule，并将Coffee和Flavor这两个实体类注册到当前模块中。
   //这是为了确保在当前模块或任何从当前模块导入的其他模块中，Coffee和Flavor实体可以被TypeORM使用。
-  exports: [],
+  exports: [CoffeesService],
 })
 export class CoffeesModule {}

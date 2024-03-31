@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 // import { CoffeesService } from './coffees/coffees.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: 'postgres',
       synchronize: true,
       autoLoadEntities: true,
-    }),
+    }), CoffeeRatingModule,
   ],
   controllers: [AppController], //使用命令nest g controller 生成
   providers: [AppService], //使用命令nest g service 生成
